@@ -1,10 +1,16 @@
 # 42sh
 Shell based on tcsh made by :
+
 Charly Le Corre
+
 Dylan Laroye
+
 Marine Poteau
+
 Mathis Lechopier
+
 Léo Neumuller (me)
+
 Yannis Alouache
 
 ## How to run :
