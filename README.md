@@ -9,7 +9,7 @@ Yannis Alouache
 
 ## How to run :
 
-go inside the repos and run
+go inside the repo and run
 
 ```make```
 
