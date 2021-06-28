@@ -1,0 +1,519 @@
+[901]
+NAME="Nothing"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo ''
+[901-END]
+
+[902]
+NAME="Exec two command"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'ls /etc'
+  echo 'cat /etc/resolv.conf'
+[902-END]
+
+[903]
+NAME="Testing with /usr/bin PATH"
+SETUP="export TERM=xterm ; PATH='/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'pwd'
+[903-END]
+
+[904]
+NAME="Testing with /bin PATH"
+SETUP="export TERM=xterm ; PATH='/bin'"
+CLEAN=""
+TESTS=
+  echo 'pwd'
+[904-END]
+
+[905]
+NAME="run commands"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'cat /etc/resolv.conf'
+  sleep 0.5
+  echo 'ls -l /etc'
+  sleep 0.5
+  echo 'pwd'
+[905-END]
+
+[906]
+NAME="setenv and unsetenv"
+SETUP="/usr/bin/env > .lstenv ; while read varenv ; do unset $varenv ; done < <(/bin/cat .lstenv | /usr/bin/cut -f1 -d=) ; export PATH=/bin:/usr/bin ; export _=ls ; export LS_COLORS=RID ; export MYBG=4 ; export LVL=4 ; export NOTE=2"
+CLEAN="while read varenv ; do export "$varenv" 2>/dev/null ; done  < <(/bin/cat .lstenv) ; /bin/rm -f .lstenv"
+TESTS=
+  echo 'unsetenv HOSTTYPE'
+  echo 'unsetenv VENDOR'
+  echo 'unsetenv OSTYPE'
+  echo 'unsetenv MACHTYPE'
+  echo 'unsetenv SHLVL'
+  echo 'unsetenv PWD'
+  echo 'unsetenv LOGNAME'
+  echo 'unsetenv USER'
+  echo 'unsetenv GROUP'
+  echo 'unsetenv HOST'
+  echo 'unsetenv REMOTEHOST'
+  echo 'unsetenv _'
+  echo 'unsetenv LS_COLORS'
+  echo 'unsetenv NOTE'
+  echo 'setenv titi'
+  echo 'setenv tata coucou'
+  echo 'env'
+  echo '/usr/bin/env'
+  echo 'setenv var1 val1'
+  echo 'setenv var2 val2'
+[906-END]
+
+[907]
+NAME="builtin cd"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'cd ..'
+  echo 'ls -l'
+  echo 'cd /usr'
+  echo 'ls -l'
+[907-END]
+
+[908]
+NAME="many tab and space"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo -e "\t\t    ls\t     \t-l    \t\t  \t -a /usr   \t\t"
+[908-END]
+
+[909]
+NAME="Launch DivZero program with core dump"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo "divzero"
+[909-END]
+
+[910]
+NAME="Launch SegFault program without core dump"
+SETUP="ulimit -c 0 ; export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "segfault"
+[910-END]
+
+[911]
+NAME="Testing simple pipe"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l /etc | grep sh"
+[911-END]
+
+[912]
+NAME="A pipe with a builtin ?"
+SETUP="export VAR1=VALEUR1 ; OLDPATH=$PATH ; PATH='/random'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo 'setenv | /bin/grep VAR1'
+  echo '/bin/ls | cd /usr'
+  echo 'ls -l'
+[912-END]
+
+[913]
+NAME="Pipe splitted right"
+SETUP="export VAR1=VALEUR1 ; OLDPATH=$PATH ; PATH='/random'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo 'exit 45|cat /etc/resolv.conf'
+[913-END]
+
+[914]
+NAME="Null pipes"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo 'ls | | cat -e'
+[914-END]
+
+[915]
+NAME="cd OLDPWD null env"
+SETUP="export TERM=xterm ; /usr/bin/env > .lstenv ; while read varenv ; do unset $varenv ; done < <(/bin/cat .lstenv | /usr/bin/cut -f1 -d=)"
+CLEAN="while read varenv ; do export "$varenv" 2>/dev/null ; done  < <(/bin/cat .lstenv) ; /bin/rm -f .lstenv""
+TESTS=
+  echo -ne 'cd -'
+[915-END]
+
+[916]
+NAME="cd .. null env"
+SETUP="export TERM=xterm ; /usr/bin/env > .lstenv ; while read varenv ; do unset $varenv ; done < <(/bin/cat .lstenv | /usr/bin/cut -f1 -d=)"
+CLEAN="while read varenv ; do export "$varenv" 2>/dev/null ; done  < <(/bin/cat .lstenv) ; /bin/rm -f .lstenv""
+TESTS=
+  echo -ne 'cd ..'
+[916-END]
+
+[917]
+NAME="basic cd ls"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'cd ..\nls'
+[917-END]
+
+[918]
+NAME="exitt"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'exitt'
+[918-END]
+
+[919]
+NAME="exit with pipes"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls | exit 13'
+[919-END]
+
+[920]
+NAME="exit test 1"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'exit 12 | ls'
+[920-END]
+
+[921]
+NAME="exit test 2"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'exit 12 | qkfdhdksqhf'
+[921-END]
+
+[922]
+NAME="exit test 3"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'exit 12 | qkfdhdksqhf | ls'
+[922-END]
+
+[923]
+NAME="exit test 4"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'qkfdhdksqhf | ls | exit 12'
+[923-END]
+
+[924]
+NAME="exit test 5"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'exit | ls'
+[924-END]
+
+[925]
+NAME="basic semicolons"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'cd .. ; ls -l'
+[925-END]
+
+[926]
+NAME="null semicolon"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls ; ; cd ..'
+[926-END]
+
+[927]
+NAME="null semicolon bis"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls ; ;'
+[927-END]
+
+[928]
+NAME="semicolon with builtins and pipes"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'cd ..; ls | grep B-CPE ; ls | cat -e'
+[928-END]
+
+[929]
+NAME="semicolon with error"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'qsdhfjqjdsfhq ; ls ;'
+[929-END]
+
+[930]
+NAME="semicolon with error bis"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls ; qdshfqksdf ; ls'
+[930-END]
+
+[931]
+NAME="semicolon with error with pipes"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls ; qdshfqksdf ; ls | segfault'
+[931-END]
+
+[932]
+NAME="semicolon with error with pipes bis"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls ; qdshfqksdf ; ls | grep lib'
+[932-END]
+
+[933]
+NAME="pipes with setenv"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls | setenv test\nenv | grep test='
+[933-END]
+
+[934]
+NAME="pipes with setenv and semicolons"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls | setenv test ; env | grep test='
+[934-END]
+
+[935]
+NAME="start with semicolons"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne '; ls'
+[935-END]
+
+[936]
+NAME="simple right redirection"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls > test\ncat test\nrm test'
+[936-END]
+
+[937]
+NAME="simple double right redirection"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls >> test\ncat test\nrm test'
+[937-END]
+
+[938]
+NAME="redirection with pipes"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls ../../ | grep B > test\ncat test\n rm test'
+[938-END]
+
+[939]
+NAME="redirection with pipes and semicolons"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls ../../ | grep B > test ; cat test\nrm test'
+[939-END]
+
+[940]
+NAME="impossible redirection"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls > test >> azer | cat -e'
+[940-END]
+
+[941]
+NAME="impossible redirection bis"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls > >'
+[941-END]
+
+[942]
+NAME="impossible redirection bis bis"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls >'
+[942-END]
+
+[943]
+NAME="impossible redirection bis bis bis"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH ;"
+TESTS=
+  echo -ne 'ls > test < test'
+  echo -ne 'rm test'
+[943-END]
+
+[944]
+NAME="redirection on a directory"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin' ; mkdir directory"
+CLEAN="PATH=$OLDPATH ; rm -r directory"
+TESTS=
+  echo -ne 'ls > directory; cat directory'
+[944-END]
+
+[945]
+NAME="setenv with wrong name"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'setenv 123Jdfnqfd!> test'
+[945-END]
+
+[401]
+NAME="globbing 1"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls l*'
+[401-END]
+
+[402]
+NAME="globbing 2"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls .. *l*'
+[402-END]
+
+[403]
+NAME="globbing with pipe"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls ..| grep l*'
+[403-END]
+
+[404]
+NAME="globbing with executable"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne '~/my_scripts/seg*'
+[404-END]
+
+[405]
+NAME="globbing multiple stars in path"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'cd ~\nls B*/li*'
+[405-END]
+
+[946]
+NAME="setenv with name not alphanumeric"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'setenv test:aaa test'
+[946-END]
+
+[947]
+NAME="setenv with underscore at the start"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'setenv _test test'
+[947-END]
+
+[948]
+NAME="Path 3"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'setenv PATH /\nbin/ls'
+[948-END]
+
+[949]
+NAME="Path 5"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'unsetenv PATH\nls'
+[949-END]
+
+[950]
+NAME="Path 5 starting without the path"
+SETUP="export OLDPATH=$PATH ; unset PATH"
+CLEAN="export PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls\nenv | grep PATH'
+[950-END]
+
+[951]
+NAME="Unsetenv with no arg"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'unsetenv'
+[951-END]
+
+[952]
+<<<<<<< HEAD
+NAME="commands with && or ||"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'ls || pwd'
+  echo 'ls && pwd'
+[952-END]
+=======
+NAME="cd with no arg"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'cd'
+[952-END]
+
+[953]
+NAME="null pipes"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls |'
+[953-END]
+
+[954]
+NAME="command with home char"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne 'ls ~'
+[954-END]
+
+[955]
+NAME="exec with home char"
+SETUP="OLDPATH=$PATH ; PATH='/bin:/usr/bin'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo -ne '~/my_scripts/segfault'
+[955-END]
+>>>>>>> master
